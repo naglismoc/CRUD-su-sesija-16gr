@@ -16,5 +16,5 @@ footer{
     <a href="index.php?page=home">home</a>
     <a href="index.php?page=about">about</a>
     <a href="index.php?page=news">news</a>
-    <a href="index.php?page=conacts">contacts</a>
+    <a href="index.php?page=contacts">contacts</a>
 </footer>
