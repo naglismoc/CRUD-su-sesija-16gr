@@ -18,17 +18,31 @@ session_start();
 
 // nuo cia vyksta naujo vartotojo irasymas
     if(isset($_GET['fname'])){
-        $person["name"]=$_GET["fname"];
-        $person["surname"]=$_GET['lname'];
-        $person["address"]=$_GET["address"];
-        save($person);
-      
+        if($_GET['fname']!="" && $_GET['lname']!="" &&$_GET['address']!=""){
+            $person["name"]=$_GET["fname"];
+            $person["surname"]=$_GET['lname'];
+            $person["address"]=$_GET["address"];
+            if(isset($_GET["id"])){
+                $person["id"]=$_GET["id"];
+            }
+            save($person);
+        }
+    }
+  
+    function save($person){
+        if(isset($person["id"])){
+            $_SESSION["people"][$person["id"]]=$person;    
+        }else{
+            $_SESSION["people"][ $_SESSION["id"]]=$person;
+            $_SESSION["id"]+=1;
+        }
     }
 
-    function save($person){
-        $_SESSION["people"][ $_SESSION["id"]]=$person;
-        $_SESSION["id"]+=1;
-    }
+    if(isset($_GET['delete'])){
+        unset($_SESSION['people'][$_GET['delete']]);
+        }
+
+    // session_unset();
 ?>
 
 
@@ -76,6 +90,8 @@ session_start();
     <th>Vardas</th>
     <th>Pavardė</th>
     <th>Adresas</th>
+    <th>delete</th>
+    <th>edit</th>
 </tr>
   <!-- ------------------------------------------------------ -->
   
@@ -87,6 +103,14 @@ session_start();
         <td><?=$person["name"]?></td>
         <td><?=$person["surname"]?></td>
         <td><?=$person["address"]?></td>
+        <td><form action=''>
+            <input type="hidden" name="delete" value="<?=$key?>">
+            <input type="submit" value="Delete">
+        </form></td>
+        <td><form action='edit.php'>
+            <input type="hidden" name="update" value="<?=$key?>">
+            <input type="submit" value="update">
+        </form></td>
     </tr>
   <?php
 }?>
